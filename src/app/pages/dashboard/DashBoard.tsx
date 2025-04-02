@@ -1,5 +1,16 @@
+import {useNavigate} from 'react-router-dom'
+
 export const Dashboard  = () => {
+  const navigate = useNavigate()
+
+  function handleClick() {
+    navigate('/entrar')
+  }
+
   return(
-    <p>Dashboard</p>
+   <div>
+     <p>Dashboard</p>
+     <button type='button' onClick={handleClick}>Login</button>
+   </div>
   )
 }
