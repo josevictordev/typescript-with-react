@@ -3,29 +3,29 @@ import React from "react"
 export const Login = () =>{
   const [email, setEmail] = React.useState("")
   const [password, setPassword] = React.useState("")
-  const [errorForm, setErrorForm] = React.useState({
-    errorEmail: false, errorPassword: false
-  })
+  const [errorEmail, setErrorEmail] = React.useState(false)
+  const [errorPassword, setErrorPassword] = React.useState(false)
 
   function handleSubmit() {
     const emailError = email.trim() === ""
     const passwordError = password.trim() === ""
-    if (emailError && passwordError) {
-      setErrorForm({errorEmail: true, errorPassword: true})
-      return
-    }
+
+    setErrorEmail(emailError)
+    setErrorPassword(passwordError)
+
+    if (emailError || passwordError) return
     console.log('enviando...');
     
   }
 
   function onChangePassword({target}: React.ChangeEvent<HTMLInputElement>) {
-    if (target.value.length !== 0) {
-      setErrorForm((prev)=>({...prev, errorPassword: false}))
+    if (target.value !== "") {
+      setErrorPassword(false)
     }
   }
   function onChangeEmail({target}: React.ChangeEvent<HTMLInputElement>) {
-    if (target.value.length !== 0) {
-      setErrorForm((prev)=>({...prev, errorEmail: false}))
+    if (target.value !== "") {
+      setErrorEmail(false)
     }
   }
   
@@ -34,12 +34,12 @@ export const Login = () =>{
       <label htmlFor="user">
         <span>Email</span>
         <input onChange={onChangeEmail} type="email" id="email" placeholder="Digite o seu nome..."/>
-        {errorForm.errorEmail && <p>Email invalido!</p>}
+        {errorEmail && <p>Email invalido!</p>}
       </label>
       <label htmlFor="password">
         <span>Senha</span>
         <input onChange={onChangePassword} type="password" id="password" placeholder="Digite o seu email..."/>
-        {errorForm.errorPassword && <p>Senha invalido!</p>}
+        {errorPassword && <p>Senha invalido!</p>}
       </label>
       <button type="button" onClick={handleSubmit}>Entrar</button>
     </form>
