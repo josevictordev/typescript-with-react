@@ -1,5 +1,6 @@
 import React, { use } from "react"
 import {v4 as uuid} from "uuid"
+import { InputLogin } from "./components/InputLogin"
 
 export const Login = () =>{
   const [email, setEmail] = React.useState<string>("")
@@ -7,6 +8,7 @@ export const Login = () =>{
   const [password, setPassword] = React.useState<string>("")
   const [errorEmail, setErrorEmail] = React.useState<boolean>(false)
   const [errorPassword, setErrorPassword] = React.useState<boolean>(false)
+  const inputRef = React.useRef<HTMLInputElement>(null)
 
   type User = {
     id: string,
@@ -77,14 +79,18 @@ export const Login = () =>{
   return(
     <div>
       <form style={{display: 'flex', flexDirection: 'column', alignItems: 'start'}}>
-        <label htmlFor="user">
-          <span>Email</span>
-          <input onChange={onChangeEmail} value={email} type="email" id="email" placeholder="Digite o seu nome..."/>
-          {errorEmail && <p>Email invalido!</p>}
-        </label>
+        <InputLogin 
+          label="email" 
+          id="email"
+          type="email"
+          value={email}
+          errorEmail={errorEmail}
+          onChange={(e)=>onChangeEmail(e)} 
+          onPressEnter={()=> inputRef.current?.focus()}
+        />
         <label htmlFor="password">
           <span>Senha</span>
-          <input onChange={onChangePassword} value={password} type="password" id="password" placeholder="Digite o seu email..."/>
+          <input ref={inputRef} onChange={onChangePassword} value={password} type="password" id="password" placeholder="Digite o seu email..."/>
           {errorPassword && <p>Senha invalido!</p>}
         </label>
         <button type="button" onClick={handleSubmit}>Entrar</button>
