@@ -1,9 +1,12 @@
 import React from 'react'
 import AppRoutes from './routes'
+import { UserLogged } from './shared/contexts'
 
 const App = () => {
   return (
-    <AppRoutes/>
+    <UserLogged>
+      <AppRoutes/>
+    </UserLogged>
   )
 }
 

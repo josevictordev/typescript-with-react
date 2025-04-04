@@ -5,8 +5,8 @@ interface IInputProps{
   value: string,
   type: string,
   id: string,
-  errorEmail: boolean,
-  onChange: (newValue: any) => void;
+  errorEmail?: boolean,
+  onChange: (newValue: string) => void;
   onPressEnter: () => void;
 }
 
@@ -21,7 +21,7 @@ export const InputLogin: React.FC<IInputProps> = (props) => {
         onChange={e=>props.onChange(e.target.value)}
         value={props.value}
         type={props.type}
-        id={props.type}
+        id={props.id}
         placeholder="Digite o seu nome..."
       />
       {props.errorEmail && <p>Email invalido!</p>}

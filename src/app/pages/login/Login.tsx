@@ -1,6 +1,8 @@
-import React, { use } from "react"
+import React from "react"
 import {v4 as uuid} from "uuid"
 import { InputLogin } from "./components/InputLogin"
+import { ButtonLogin } from "./components/ButtonLogin"
+import { useUserLoagged } from "../../shared/hooks"
 
 export const Login = () =>{
   const [email, setEmail] = React.useState<string>("")
@@ -9,22 +11,7 @@ export const Login = () =>{
   const [errorEmail, setErrorEmail] = React.useState<boolean>(false)
   const [errorPassword, setErrorPassword] = React.useState<boolean>(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
-
-  type User = {
-    id: string,
-    email: string,
-    password: string,
-  }
-
-  const [users, setUsers] = React.useState<User[]>(() => {
-    const saved = localStorage.getItem("users");
-    return saved ? JSON.parse(saved) : [];
-  });
-  
-  // Para salvar:
-  React.useEffect(() => {
-    localStorage.setItem("users", JSON.stringify(users));
-  }, [users]);
+  const {userName, userEmail, setUsers, users} = useUserLoagged()
   
   function handleSubmit() {
     const emailError: boolean = email.trim() === ""
@@ -79,15 +66,11 @@ export const Login = () =>{
   return(
     <div>
       <form style={{display: 'flex', flexDirection: 'column', alignItems: 'start'}}>
-        <InputLogin 
-          label="email" 
-          id="email"
-          type="email"
-          value={email}
-          errorEmail={errorEmail}
-          onChange={(e)=>onChangeEmail(e)} 
-          onPressEnter={()=> inputRef.current?.focus()}
-        />
+        <label htmlFor="email">
+          <span>Email</span>
+          <input ref={inputRef} onChange={onChangeEmail} value={email} type="email" id="email" placeholder="Digite o seu email..."/>
+          {errorEmail && <p>Email invalido!</p>}
+        </label>
         <label htmlFor="password">
           <span>Senha</span>
           <input ref={inputRef} onChange={onChangePassword} value={password} type="password" id="password" placeholder="Digite o seu email..."/>
@@ -101,11 +84,14 @@ export const Login = () =>{
             <p>Id: {user.id}</p>
             <p>Email: {user.email}</p>
             <p>Senha: {user.password}</p>
-            <button onClick={()=> handleEditUser(user.id)}>Editar</button>
-            <button onClick={()=> handleDelete(user.id)}>Excluir</button>
+            <ButtonLogin type="button" onClick={() => handleEditUser(user.id)}>Editar</ButtonLogin>
+            <ButtonLogin type="button" onClick={() => handleDelete(user.id)}>Deletar</ButtonLogin>
           </div>
         ))}
       </div>
+      {userName && <>Nome user: {userName}</>}
+      <br />
+      {userEmail && <>Email user: {userEmail}</>}
     </div>
   )
 }
