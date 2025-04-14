@@ -1,6 +1,5 @@
 import React from "react"
 import {v4 as uuid} from "uuid"
-import { InputLogin } from "./components/InputLogin"
 import { ButtonLogin } from "./components/ButtonLogin"
 import { useUserLoagged } from "../../shared/hooks"
 

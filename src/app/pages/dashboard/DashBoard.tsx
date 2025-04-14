@@ -1,37 +1,48 @@
-import React from 'react'
-import {useNavigate} from 'react-router-dom'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  Tarefa,
+  TarefasServices,
+} from '../../shared/services/api/tarefas/TarefasServices';
+import { ApiException } from '../../shared/services/api/ApiException';
 
-export const Dashboard  = () => {
-  const navigate = useNavigate()
+export const Dashboard = () => {
+  const navigate = useNavigate();
 
-  const [list, setList] = React.useState<string[]>([])
+  const [list, setList] = React.useState<Tarefa[]>([]);
 
-  const addToList: React.KeyboardEventHandler<HTMLInputElement> = React.useCallback((e) => {
-    if (e.key === "Enter") {
-      if (e.currentTarget.value.length < 0) return
-      if (e.currentTarget.value.trim().length < 0) return
+  const addToList: React.KeyboardEventHandler<HTMLInputElement> =
+    React.useCallback((e) => {}, []);
 
-      const value = e.currentTarget.value
-
-      setList((oldList) => {
-       return [...oldList, value]
-      })
-      e.currentTarget.value = ""
-    }
-  },[])
+  React.useEffect(() => {
+    TarefasServices.getAll().then((result) => {
+      if (result instanceof ApiException) {
+        alert(result.message);
+      } else {
+        setList(result);
+      }
+    });
+  }, []);
 
   function handleClick() {
-    navigate('/entrar')
+    navigate('/entrar');
   }
 
-  return(
-   <div>
-      <input type="text" onKeyDown={addToList}/>
+  return (
+    <div>
+      <form>
+        <label>Nova Tarefa</label>
+        <input type="text" />
+      </form>
       <ul>
-        {list.map(value => <li>{value}</li>)}
+        {list.map((item) => (
+          <li key={item.id}>{item.title}</li>
+        ))}
       </ul>
-     <p>Dashboard</p>
-     <button type='button' onClick={handleClick}>Login</button>
-   </div>
-  )
-}
+      <p>Dashboard</p>
+      <button type="button" onClick={handleClick}>
+        Login
+      </button>
+    </div>
+  );
+};
